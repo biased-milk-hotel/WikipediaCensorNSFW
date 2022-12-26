@@ -7,18 +7,9 @@ A user-script for the English Wikipedia to hide NSFW images based on
 a list of regex patterns, with a button to reveal those images individually.
 The NSFW patterns are matched against the images' names and captions.
 
-____________________________________________________________________________________________________________________________________
-NOTE
-The final bundled output is compiled with webpack (as it is written in TypeScript)
-and is not easily readble to (most) humans.
-
-The readable source code before compilation is hosted on GitHub:
-===============================================================
-https://<link to repo yet to be added>
-===============================================================
-____________________________________________________________________________________________________________________________________
 */
 
+import { NSFW_PATTERNS } from "./patterns";
 /* global mw, $, CensorNSFW_configs */
 
 const _CONFIGS = {
@@ -205,31 +196,6 @@ const NSFW_SCRIPT_MAIN = () => {
     });
   });
 };
-
-// the array below contains regex patterns to consider X as NSFW
-const NSFW_PATTERNS = [
-  /(private.{0,3}part|breasted)/i,
-  /\b(having|have|perform|depict|oral)(ing|).{0,14}sex/i,
-  /\b(sex|69|t-square).{0,3}position/i,
-
-  /\bpenetration\b/i,
-
-  /\b(mating|coitus|intercourse|rape|copulate|copulating)\b/,
-  /(\bsexual|erotic|erotism)/i,
-  /\b(clitoris|rectum)\b/i,
-  /\bfingering\b/,
-  /\b(cunnilingus|anilingus|whipping|facesitting|flagellation|fellatio|fellation|bdsm|dominatrix|bondage|anal|anally|pegging|ejaculation|sperm)(s|es|)\b/i,
-  /\bdeep\W{0,4}throat(ing|)\b/i,
-  /\btea\W{0,4}bag(ging|)\b/i,
-  /\b(testicle|testicular|nipple|breast|testes|testis|scrotum|genitalia|genital|anus|penis|vagina|vaginal|vaginally|vulva|vulvae|labia|ovary|ovaries)(s|es|)\b/i,
-  /\b(reproduction|reproductive)/i,
-  /\W*bath(er|ers|)\b/i,
-  /\b(kamasutra|kama sutra|pubic)\b/i,
-
-  /(naked|nude|nudist|naturist|nudity)(s|es|)\b/i,
-  /(showering|skinny dipping|skinny dip|swim|swimming|sauna)/i,
-  /(urine|urinating|urination|urinate|urinary)/i,
-];
 
 // CSS stuff
 const NSFW_CSS = `

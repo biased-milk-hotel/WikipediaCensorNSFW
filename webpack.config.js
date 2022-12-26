@@ -13,10 +13,21 @@ module.exports = {
         terserOptions: {
           compress: false,
           output: {
+            preamble: `/* NOTE
+  The final bundled output is compiled with webpack (as the source code is written in TypeScript)
+  and is not easily readble to (most) humans.
+
+  The readable source code before compilation is hosted on GitHub:
+===============================================================
+    https://github.com/biased-milk-hotel/WikipediaCensorNSFW
+===============================================================
+____________________________________________________________________________________________________________________________________
+  */`,
             comments: /(#####)/i,
             beautify: true,
           },
         },
+
         extractComments: false,
       }),
     ],
