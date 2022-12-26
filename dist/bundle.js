@@ -48,13 +48,17 @@ The NSFW patterns are matched against the images' names and captions.
             value: true
         };
         const a = t(414);
-        const s = {
+        let s = {};
+        if (typeof CensorNSFW_configs !== "undefined") {
+            s = CensorNSFW_configs;
+        }
+        const o = {
             enable_debugging: false,
             detect_caption: true,
-            ...CensorNSFW_configs || {}
+            ...s
         };
-        let o;
-        const r = {
+        let r;
+        const l = {
             is_enabled: () => mw.cookie.get("disableCensorNSFW") == "1" ? false : true,
             disable_script: () => {
                 mw.notify("CensorNSFW has been disabled.");
@@ -69,23 +73,23 @@ The NSFW patterns are matched against the images' names and captions.
                 mw.cookie.set("disableCensorNSFW", "0", {
                     sameSite: "Strict"
                 });
-                l();
+                c();
             },
             update_toolbox_button: () => {
-                if (o) $(o).remove();
-                if (r.is_enabled()) {
-                    o = mw.util.addPortletLink("p-cactions", "#", "Disable CensorNSFW", "ds-cnsfw", "Disable censoring NSFW images", "N");
+                if (r) $(r).remove();
+                if (l.is_enabled()) {
+                    r = mw.util.addPortletLink("p-cactions", "#", "Disable CensorNSFW", "ds-cnsfw", "Disable censoring NSFW images", "N");
                 } else {
-                    o = mw.util.addPortletLink("p-cactions", "#", "Enable CensorNSFW", "ds-cnsfw", "Enable censoring NSFW images", "N");
+                    r = mw.util.addPortletLink("p-cactions", "#", "Enable CensorNSFW", "ds-cnsfw", "Enable censoring NSFW images", "N");
                 }
-                $(o).off().on("click", (function(e) {
+                $(r).off().on("click", (function(e) {
                     e.preventDefault();
-                    if (r.is_enabled()) {
-                        r.disable_script();
+                    if (l.is_enabled()) {
+                        l.disable_script();
                     } else {
-                        r.enable_script();
+                        l.enable_script();
                     }
-                    r.update_toolbox_button();
+                    l.update_toolbox_button();
                 }));
             },
             inject_CSS: e => {
@@ -97,9 +101,9 @@ The NSFW patterns are matched against the images' names and captions.
                 const n = e => e.text().trim();
                 const t = e.src;
                 const [i, a] = t.split("/").slice(-2);
-                const o = i.length < 3 ? a : i;
-                let r = decodeURIComponent(o).replace(/_/g, " ");
-                if (s.detect_caption) {
+                const s = i.length < 3 ? a : i;
+                let r = decodeURIComponent(s).replace(/_/g, " ");
+                if (o.detect_caption) {
                     const t = $(e).parent().parent().children("[class$=caption]");
                     if (t.length) {
                         r += ` ${n(t)}`;
@@ -126,35 +130,35 @@ The NSFW patterns are matched against the images' names and captions.
                 }));
             }
         };
-        r.update_toolbox_button();
-        const l = () => {
-            if (!r.is_enabled()) {
-                if (s.enable_debugging) console.error("CensorNSFW is set to disabled.");
+        l.update_toolbox_button();
+        const c = () => {
+            if (!l.is_enabled()) {
+                if (o.enable_debugging) console.error("CensorNSFW is set to disabled.");
                 return;
             }
-            r.inject_CSS(c);
+            l.inject_CSS(d);
             const e = document.querySelectorAll("img");
             e.forEach((e => {
-                const n = r.extract_names(e);
+                const n = l.extract_names(e);
                 a.NSFW_PATTERNS.every((t => {
                     if (n.match(t)) {
-                        const i = r.generate_random_id();
-                        if (s.enable_debugging) {
+                        const i = l.generate_random_id();
+                        if (o.enable_debugging) {
                             console.log(`Matched "${n}" with pattern: `, t);
                         }
                         const a = `<button class="reveal_button" data-nsfwid="${i}" alt="Reveal NSFW content">Reveal</button>`;
-                        const o = `<div class="nsfw_blurred ${i}">Potential NSFW content ${a}</div>`;
+                        const s = `<div class="nsfw_blurred ${i}">Potential NSFW content ${a}</div>`;
                         $(e).addClass("nsfw_image");
                         $(e).addClass(i);
-                        $(e).parent().parent().prepend(o);
-                        r.reveal_button_hook();
+                        $(e).parent().parent().prepend(s);
+                        l.reveal_button_hook();
                         return false;
                     }
                     return true;
                 }));
             }));
         };
-        const c = `\n.nsfw_image {\n  display: none !important;\n}\n\n.nsfw_blurred {\n  background: #e37575;\n  width: 100%;\n  max-height:300px;\n  min-height: 100px;\n  color: white;\n  display: grid;\n  font-weight: bold;\n  align-items: center;\n}\n\n.reveal_button {\n  margin: 5px;\n  cursor: pointer;\n}\n`;
-        l();
+        const d = `\n.nsfw_image {\n  display: none !important;\n}\n\n.nsfw_blurred {\n  background: #e37575;\n  width: 100%;\n  max-height:300px;\n  min-height: 100px;\n  color: white;\n  display: grid;\n  font-weight: bold;\n  align-items: center;\n}\n\n.reveal_button {\n  margin: 5px;\n  cursor: pointer;\n}\n`;
+        c();
     })();
 })();

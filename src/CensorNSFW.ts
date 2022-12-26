@@ -11,14 +11,18 @@ The NSFW patterns are matched against the images' names and captions.
 
 import { NSFW_PATTERNS } from "./patterns";
 /* global mw, $, CensorNSFW_configs */
-
+let custom_conf = {};
+// @ts-ignore-line
+if (typeof CensorNSFW_configs !== "undefined") {
+  // @ts-ignore-line
+  custom_conf = CensorNSFW_configs;
+}
 const _CONFIGS = {
   enable_debugging: false,
   // takes into account an image's
   // caption/description while matching the patterns
   detect_caption: true,
-  // @ts-ignore-line
-  ...(CensorNSFW_configs || {}),
+  ...custom_conf,
 };
 
 let CensorNSFW_Button: HTMLLIElement;
